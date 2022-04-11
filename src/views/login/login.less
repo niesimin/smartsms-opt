@@ -1,0 +1,60 @@
+.login{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  &-bg{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  &-bg2{
+    position: absolute;
+    left: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50%;
+  }
+  &-con{
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translateY(-60%);
+    width: 400px;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.371);
+    border: 1px solid #56a1e3;
+    text-align: center;
+    .ivu-card-head p {
+      color: #007fe1;
+      text-align: left;
+      font-size: 18px;
+    }
+    .ivu-input-wrapper{
+      width: 80%;
+      .ivu-input{
+        height: 44px;
+      }
+      .ivu-input-prefix i{
+        line-height: 44px;
+      }
+      
+    }
+    .ivu-btn-primary{
+      line-height: 44px;
+      height: 44px;
+      width: 80%;
+      font-size: 18px;
+      letter-spacing: 2px;
+    }
+    .login-tip {
+      font-size: 10px;
+      text-align: center;
+      color: #c3c3c3;
+    }
+  }
+	.ivu-form-item-error-tip{
+		margin-left:10% ;
+	}
+}
