@@ -338,7 +338,7 @@ export default {
             introduction: "",
 
             urlClickAction: {
-              type: 0,
+              type: "0",
               url: "",
               backupUrl: "",
               pkgName: "",
@@ -350,7 +350,7 @@ export default {
             button: {
               title: "",
               clickAction: {
-                type: 0,
+                type: "0",
                 url: "",
                 backupUrl: "",
                 pkgName: "",
@@ -364,7 +364,7 @@ export default {
             introduction: "",
 
             urlClickAction: {
-              type: 0,
+              type: "0",
               url: "",
               backupUrl: "",
               pkgName: "",
@@ -376,7 +376,7 @@ export default {
             button: {
               title: "",
               clickAction: {
-                type: 0,
+                type: "0",
                 url: "",
                 backupUrl: "",
                 pkgName: "",
@@ -418,7 +418,7 @@ export default {
         introduction: "",
 
         urlClickAction: {
-          type: 0,
+          type: "0",
           url: "",
           backupUrl: "",
           pkgName: "",
@@ -430,7 +430,7 @@ export default {
         button: {
           title: "",
           clickAction: {
-            type: 0,
+            type: "0",
             url: "",
             backupUrl: "",
             pkgName: "",

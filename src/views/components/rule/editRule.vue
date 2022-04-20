@@ -126,8 +126,47 @@
                         v-for="item in SearchMatchType"
                         :key="item.dv"
                         :label="item.did"
-                        >{{ item.dv }}</Radio
-                      >
+                        >{{ item.dv }}
+                        <Tooltip
+                          v-if="item.did == 0"
+                          max-width="400"
+                          :transfer="true"
+                          placement="top"
+                          style="margin:0 10px 0 -2px"
+                        >
+                          <Icon size="18" type="md-help-circle" />
+                          <div slot="content">
+                            <p>
+                              URL完全一致才会被识别。
+                            </p>
+                            <p>
+                              例如：投放URL为ted.top/abc，则短信URL也为ted.top/abc
+                              会被识别解析。
+                            </p>
+                          </div>
+                        </Tooltip>
+
+                        <Tooltip
+                          v-else
+                          max-width="600"
+                          :transfer="true"
+                          placement="top"
+                          style="margin:0 10px 0 -2px"
+                        >
+                          <Icon size="18" type="md-help-circle" />
+                          <div slot="content">
+                            <p>
+                              只要短信中URL与投放中所填URL前缀一致即可识别；
+                            </p>
+                            <p>
+                              例如：投放URL为td6.cn/abc，短信中URL为ted.top/abc/123、ted.top/abc/456都会被识别。
+                            </p>
+                            <p>
+                              且当前仅支持用/拼接用户标识
+                            </p>
+                          </div>
+                        </Tooltip>
+                      </Radio>
                     </RadioGroup>
                   </FormItem>
 
@@ -155,6 +194,14 @@
                       ></span
                     >
                   </FormItem>
+                  <div
+                    class="text-gray"
+                    style="text-align:right;margin-top:-20px;font-size:12px"
+                  >
+                    <Icon
+                      type="md-alert"
+                    />提示：1、如使用非泰迪熊短链，请确保输入的短链域名已经提前报备，否则无法提交。
+                  </div>
                 </template>
               </div>
             </Panel>

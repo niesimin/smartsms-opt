@@ -318,7 +318,7 @@ export default {
           url: "",
 
           urlClickAction: {
-            type: 0,
+            type: "0",
             url: "",
             backupUrl: "",
             pkgName: "",
@@ -330,7 +330,7 @@ export default {
               title: "",
               url: "",
               clickAction: {
-                type: 0,
+                type: "0",
                 url: "",
                 backupUrl: "",
                 pkgName: "",
@@ -448,7 +448,7 @@ export default {
         title: "",
         url: "",
         clickAction: {
-          type: 0,
+          type: "0",
           url: "",
           backupUrl: "",
           pkgName: "",

@@ -286,7 +286,7 @@ export default {
           url: "",
 
           clickAction: {
-            type: 0,
+            type: "0",
             url: "",
             backupUrl: "",
             pkgName: "",
@@ -296,7 +296,7 @@ export default {
           button: {
             title: "",
             clickAction: {
-              type: 0,
+              type: "0",
               url: "",
               backupUrl: "",
               pkgName: "",

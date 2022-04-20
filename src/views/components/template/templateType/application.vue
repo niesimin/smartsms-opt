@@ -170,7 +170,7 @@ export default {
           appName: "",
 
           urlClickAction: {
-            type: 1,
+            type: "1",
             url: "",
             backupUrl: "",
             pkgName: "",

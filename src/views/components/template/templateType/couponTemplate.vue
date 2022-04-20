@@ -223,7 +223,7 @@ export default {
           expirationTime: "",
 
           urlClickAction: {
-            type: 1,
+            type: "0",
             url: "",
             backupUrl: "",
             pkgName: "",

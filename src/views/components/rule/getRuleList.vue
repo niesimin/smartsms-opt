@@ -216,7 +216,7 @@ export default {
         },
         {
           title: "投放名称",
-          width: 160,
+          width: 240,
           fixed: "left",
           key: "putName",
           render: (h, { row }) => {

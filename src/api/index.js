@@ -50,19 +50,7 @@ export const api = {
     permissionSet: "system/permissionSet", // 权限设置
     adminType: "system/adminType", //查找管理员角色
     passwdModify: "system/passwdModify",
+    adminUpdate: "system/adminUpdate",
     getAdminAllLists: "system/getAdminAllLists" //获取管理员无分页
-  },
-  data: {
-    pageStatistics: "data/pageStatistics",
-    downloadPageStatistics: "data/downloadPageStatistics",
-    pageStatisticsCommon: "data/pageStatisticsCommon",
-    downloadPageStatisticsCommon: "data/downloadPageStatisticsCommon",
-    andOrderStatistics: "data/andOrderStatistics", //和教育统计列表
-    downloadAndOrderStatistics: "data/downloadAndOrderStatistics" //和教育统计列表导出
-  },
-  client: {
-    getOrderList: "client/getOrderList",
-    getRightList: "client/getRightList",
-    downloadGetOrder: "client/downloadGetOrder"
   }
 };

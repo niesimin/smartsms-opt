@@ -1,5 +1,15 @@
 <template>
   <div>
+    <Alert show-icon>
+      投放时URL域名需在厂商白名单内，域名报备即用于报备您的URL域名，将其添加到厂商白名单。
+      <div>
+        投放时建议使用泰迪熊短链，泰迪熊短链域名无需报备。<b
+          @click="toGetShortUrlList"
+          style="cursor:pointer"
+          >创建泰迪熊短链</b
+        >
+      </div>
+    </Alert>
     <Card :bordered="false" class="main-card-content">
       <!-- <Button type="primary" @click="exportExcel">导出为Csv文件</Button> -->
 
@@ -263,6 +273,12 @@ export default {
     handleSearchSubmit() {
       this.tableParma = Object.assign(this.tableParma, { page: 1 });
       this.remoteTable();
+    },
+
+    toGetShortUrlList() {
+      this.$router.push({
+        name: "getShortUrlList"
+      });
     },
 
     //初始化添加

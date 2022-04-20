@@ -349,7 +349,7 @@ export default {
           url: "",
 
           urlClickAction: {
-            type: 0,
+            type: "0",
             url: "",
             backupUrl: "",
             pkgName: "",
@@ -367,7 +367,7 @@ export default {
             {
               title: "",
               clickAction: {
-                type: 0,
+                type: "0",
                 url: "",
                 backupUrl: "",
                 pkgName: "",
@@ -476,7 +476,7 @@ export default {
       let buttonList = {
         title: "",
         clickAction: {
-          type: 0,
+          type: "0",
           url: "",
           backupUrl: "",
           pkgName: "",
