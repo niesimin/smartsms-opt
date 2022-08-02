@@ -172,6 +172,44 @@
       :okBtn="action == 'delect' ? '删除' : '确定'"
       ref="delModal"
     ></Alertmodal>
+
+    <Modal v-model="uploadUrl" title="追加URL">
+      <div style="text-align:center">
+        <UploadFile
+          v-if="uploadUrl"
+          :format="['xlsx', 'xls']"
+          ref="uploadUrlFile"
+          @UploadSuccess="getFileUrl"
+        ></UploadFile>
+        <div>{{ fileName }}</div>
+        <div class="text-gray text-center" style="font-size:12px">
+          <Icon type="md-alert" />提示：请上传xlsx、xls格式文件，内容格式详见
+          <i class="text-primary text-cursor" @click="downloadUrlTemplate"
+            >模板操作说明</i
+          >。
+        </div>
+      </div>
+      <div slot="footer">
+        <Button type="default" @click="closeUploadUrlModal">取消</Button>
+      </div>
+    </Modal>
+
+    <FormModal
+      formTitleIcon="md-list-box"
+      formTitleText="URL列表"
+      :width="1100"
+      ref="appendUrlList"
+    >
+      <Tables
+        :columns="urlColumns"
+        :deleable="false"
+        :detailable="false"
+        :editable="false"
+        :page="true"
+        ref="appendUrlListRemote"
+      >
+      </Tables>
+    </FormModal>
   </div>
 </template>
 
@@ -180,12 +218,15 @@ import Tables from "@/components/tables/tables.vue";
 import { remoteKeyFactory } from "@/libs/util";
 import { getFormatTimesTamp, keyFactory } from "@/libs/tools";
 import Alertmodal from "@/components/modal/alertmodal.vue";
-
+import UploadFile from "@/components/upload/upload.vue";
+import FormModal from "@/components/modal/formModal.vue";
 export default {
   name: "getRuleList",
   components: {
     Tables,
-    Alertmodal
+    Alertmodal,
+    UploadFile,
+    FormModal
   },
   data() {
     return {
@@ -225,7 +266,7 @@ export default {
               {
                 props: {
                   content: "查看详情",
-                  placement: "bottom"
+                  placement: "right"
                 }
               },
               [
@@ -271,7 +312,33 @@ export default {
         {
           title: "URL",
           key: "url",
-          width: 150
+          width: 150,
+          render: (h, { row }) => {
+            return h(
+              "Tooltip",
+              {
+                props: {
+                  content: "查看追加URL",
+                  placement: "right"
+                }
+              },
+              [
+                h(
+                  "i",
+                  {
+                    class: "text-cursor text-darkPrimary",
+
+                    on: {
+                      click: () => {
+                        this.openAppendUrlModal(row.ruleId);
+                      }
+                    }
+                  },
+                  row.url
+                )
+              ]
+            );
+          }
         },
         {
           title: "OPPO状态",
@@ -404,7 +471,7 @@ export default {
         {
           title: "操作",
           key: "操作",
-          width: 150,
+          width: 180,
           align: "center",
           fixed: "right",
           render: (h, { row }) => {
@@ -413,29 +480,20 @@ export default {
               row.vivoStatus != 0 &&
               row.xiaomiStatus != 0
                 ? h(
-                    "Tooltip",
+                    "i",
                     {
-                      props: {
-                        content: "删除",
-                        placement: "bottom"
+                      class: "text-danger",
+                      style: {
+                        cursor: "pointer",
+                        marginRight: "10px"
+                      },
+                      on: {
+                        click: () => {
+                          this.openRemoveModal(row);
+                        }
                       }
                     },
-                    [
-                      h("Icon", {
-                        class: "text-danger",
-                        props: {
-                          custom: "iconfont icon-del"
-                        },
-                        style: {
-                          cursor: "pointer"
-                        },
-                        on: {
-                          click: () => {
-                            this.openRemoveModal(row);
-                          }
-                        }
-                      })
-                    ]
+                    "删除"
                   )
                 : "",
 
@@ -443,30 +501,20 @@ export default {
               row.vivoStatus == 3 ||
               row.xiaomiStatus == 3
                 ? h(
-                    "Tooltip",
+                    "i",
                     {
-                      props: {
-                        content: "下线",
-                        placement: "bottom"
-                      },
+                      class: "text-danger",
                       style: {
-                        cursor: "pointer"
+                        cursor: "pointer",
+                        marginRight: "10px"
+                      },
+                      on: {
+                        click: () => {
+                          this.updateAuditStatusRule(row, 4);
+                        }
                       }
                     },
-                    [
-                      h("Icon", {
-                        class: "text-darkPrimary",
-                        props: {
-                          size: "20",
-                          type: "md-arrow-round-down"
-                        },
-                        on: {
-                          click: () => {
-                            this.updateAuditStatusRule(row, 4);
-                          }
-                        }
-                      })
-                    ]
+                    "下线"
                   )
                 : "",
 
@@ -474,30 +522,39 @@ export default {
               row.vivoStatus == 4 ||
               row.xiaomiStatus == 4
                 ? h(
-                    "Tooltip",
+                    "i",
                     {
-                      props: {
-                        content: "上线",
-                        placement: "bottom"
-                      },
+                      class: "text-darkPrimary",
                       style: {
-                        cursor: "pointer"
+                        cursor: "pointer",
+                        marginRight: "10px"
+                      },
+                      on: {
+                        click: () => {
+                          this.updateAuditStatusRule(row, 3);
+                        }
                       }
                     },
-                    [
-                      h("Icon", {
-                        class: "text-darkPrimary",
-                        props: {
-                          size: "20",
-                          type: "md-arrow-round-up"
-                        },
-                        on: {
-                          click: () => {
-                            this.updateAuditStatusRule(row, 3);
-                          }
+                    "上线"
+                  )
+                : "",
+
+              row.putType === 0 && this.matchBrace(row)
+                ? h(
+                    "i",
+                    {
+                      class: "text-darkPrimary",
+                      style: {
+                        cursor: "pointer",
+                        marginRight: "10px"
+                      },
+                      on: {
+                        click: () => {
+                          this.openUploadUrlModal(row);
                         }
-                      })
-                    ]
+                      }
+                    },
+                    "追加URL"
                   )
                 : ""
             ]);
@@ -528,13 +585,149 @@ export default {
       currentData: {},
       action: "add",
       modalContent: "",
-      auditStatus: null
+      auditStatus: null,
+      uploadUrl: false,
+      ruleId: null,
+      urlColumns: [
+        {
+          type: "index",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "手机号",
+          key: "phone",
+          minWidth: 150
+        },
+        {
+          title: "URL",
+          key: "url",
+          minWidth: 160
+        },
+        {
+          title: "使用泰迪短链",
+          key: "usetedurl",
+          render: (h, { row }) => {
+            return h(
+              "i",
+              {
+                class: row.usetedurl ? "text-darkPrimary" : "text-danger"
+              },
+              row.usetedurl ? "是" : "否"
+            );
+          },
+          minWidth: 120
+        },
+        {
+          title: "寻址状态",
+          key: "addressingStatus",
+          render: (h, { row }) => {
+            return h(
+              "i",
+              {
+                class:
+                  row.addressingStatus == 1 ? "text-danger" : "text-darkPrimary"
+              },
+              row.addressingStatus == 1 ? "失败" : "成功"
+            );
+          },
+          minWidth: 120
+        },
+        {
+          title: "OPPO追加状态",
+          key: "oppoStatus",
+          render: (h, { row }) => {
+            return h(
+              "i",
+              {
+                class: row.oppoStatus == 1 ? "text-danger" : "text-darkPrimary"
+              },
+              row.oppoStatus ? "失败" : "成功"
+            );
+          },
+          minWidth: 140
+        },
+        {
+          title: "VIVO追加状态",
+          key: "vivoStatus",
+          render: (h, { row }) => {
+            return h(
+              "i",
+              {
+                class: row.vivoStatus == 1 ? "text-danger" : "text-darkPrimary"
+              },
+              row.vivoStatus ? "失败" : "成功"
+            );
+          },
+          minWidth: 130
+        },
+        {
+          title: "XM追加状态",
+          key: "xiaomiStatus",
+          render: (h, { row }) => {
+            return h(
+              "i",
+              {
+                class:
+                  row.xiaomiStatus == 1 ? "text-danger" : "text-darkPrimary"
+              },
+              row.xiaomiStatus ? "失败" : "成功"
+            );
+          },
+          minWidth: 120
+        },
+        {
+          title: "业务状态码",
+          key: "code",
+          render: (h, { row }) => {
+            return h(
+              "i",
+              {
+                class: row.code ? "text-darkPrimary" : "text-danger"
+              },
+              row.code ? "成功" : "失败"
+            );
+          },
+          minWidth: 120
+        },
+
+        {
+          title: "创建时间",
+          key: "createDate",
+          timesTamp: true,
+          render: (h, { row }) => {
+            return h("div", getFormatTimesTamp(row.createDate));
+          },
+          minWidth: 170
+        }
+      ],
+      fileName: ""
     };
   },
   mounted() {
     this.remoteTable();
   },
+  computed: {
+    matchBrace() {
+      return row => {
+        let newtxt =
+          (row.oppoStatus != 0 &&
+            row.oppoStatus != 2 &&
+            row.oppoStatus != 12 &&
+            row.oppoStatus != 16) ||
+          (row.vivoStatus != 0 &&
+            row.vivoStatus != 2 &&
+            row.vivoStatus != 12 &&
+            row.vivoStatus != 16) ||
+          (row.xiaomiStatus != 0 &&
+            row.xiaomiStatus != 2 &&
+            row.xiaomiStatus != 12 &&
+            row.xiaomiStatus != 16);
 
+        return newtxt;
+      };
+    }
+  },
   methods: {
     //请求table数据
     remoteTable() {
@@ -598,6 +791,73 @@ export default {
           this.$refs.delModal.colseModal();
         }
       });
+    },
+
+    openUploadUrlModal(row) {
+      this.ruleId = row.ruleId;
+      this.fileName = "";
+      this.uploadUrl = true;
+    },
+    closeUploadUrlModal() {
+      this.uploadUrl = false;
+    },
+    getFileUrl(url, file) {
+      this.fileName = file.name;
+      let params = {
+        ruleId: this.ruleId,
+        type: 0,
+        usetedurl: 0,
+        urlFile: url.split("base64,")[1],
+        fileName: file.name
+      };
+      this.$refs.uploadUrlFile.addProgress(60);
+      this.$post(this.$api.rule.uploadUrlFile, params)
+        .then(res => {
+          if (res.error == 0) {
+            this.$refs.uploadUrlFile.onUploadSuccess();
+            this.closeUploadUrlModal();
+            this.$Modal.success({
+              title: "上传成功",
+              content:
+                "文件上传成功！您可以点击下方 '确定' 按钮或表格列表的 'URL' 链接查看追加的URL数据",
+              onOk: () => {
+                setTimeout(() => {
+                  this.openAppendUrlModal(this.ruleId);
+                }, 500);
+              }
+            });
+          } else {
+            this.$refs.uploadUrlFile.onUploadError(res);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.$refs.uploadUrlFile.addProgress(100, "wrong");
+        });
+    },
+    //下载上传url模板
+    downloadUrlTemplate() {
+      let baseUrl =
+        process.env.NODE_ENV === "development"
+          ? this.$config.baseUrl.dev
+          : this.$config.baseUrl.pro;
+      window.location.href = baseUrl + this.$api.rule.downloadUrlTemplate;
+    },
+
+    //查看追加URL
+    openAppendUrlModal(ruleId) {
+      this.$refs.appendUrlList.openModal();
+      this.$refs.appendUrlListRemote.remoteTable(
+        this.$api.rule.getAppendUrlList,
+        {
+          ruleId: ruleId,
+          phone: "",
+          url: "",
+          page: 1,
+          recPerPage: 10,
+          accurate: false
+        }
+      );
     }
   }
 };

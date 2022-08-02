@@ -32,7 +32,11 @@ export const post = (url, parma) => {
       .then(res => {
         store.commit("user/setSubmitLoading", false);
 
-        if (JSON.stringify(res.data) == "{}" || res.data == undefined) {
+        if (
+          JSON.stringify(res.data) == "{}" ||
+          res.data == undefined ||
+          res.data.error == 330
+        ) {
           store.dispatch("user/handleLoginOut").then(() => {
             router.push({
               name: "login"

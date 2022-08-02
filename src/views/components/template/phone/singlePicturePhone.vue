@@ -26,7 +26,7 @@
             >
           </div>
           <div class="templateText" v-if="!showOriginalText">
-            {{ phoneData.templateText }}
+            {{ matchBrace(phoneData.templateText) }}
           </div>
           <template v-if="phoneData.singlePicture && showOriginalText">
             <div
@@ -44,10 +44,10 @@
               @click="toLink(phoneData.singlePicture.clickAction.url)"
             >
               <h4 v-if="phoneData.singlePicture.title">
-                {{ phoneData.singlePicture.title }}
+                {{ matchBrace(phoneData.singlePicture.title) }}
               </h4>
               <div class="digest" v-if="phoneData.singlePicture.introduction">
-                {{ phoneData.singlePicture.introduction }}
+                {{ matchBrace(phoneData.singlePicture.introduction) }}
               </div>
             </div>
             <div class="bottom">
@@ -93,7 +93,7 @@
               @click="toLink(phoneData.singlePicture.clickAction.url)"
             >
               <h4>
-                {{ phoneData.singlePicture.title }}
+                {{ matchBrace(phoneData.singlePicture.title) }}
               </h4>
             </div>
           </template>
@@ -105,7 +105,7 @@
                 : 'templateText'
             "
           >
-            {{ phoneData.templateText }}
+            {{ matchBrace(phoneData.templateText) }}
           </div>
         </div>
       </div>
@@ -129,10 +129,10 @@
               @click="toLink(phoneData.singlePicture.clickAction.url)"
             >
               <h4 v-if="phoneData.singlePicture.title">
-                {{ phoneData.singlePicture.title }}
+                {{ matchBrace(phoneData.singlePicture.title) }}
               </h4>
               <div class="digest" v-if="phoneData.singlePicture.introduction">
-                {{ phoneData.singlePicture.introduction }}
+                {{ matchBrace(phoneData.singlePicture.introduction) }}
               </div>
             </div>
             <div class="bottom">
@@ -150,7 +150,11 @@
           </template>
         </div>
         <div v-else class="aim">
-          {{ phoneData.templateText ? phoneData.templateText : "短信原文" }}
+          {{
+            phoneData.templateText
+              ? matchBrace(phoneData.templateText)
+              : "短信原文"
+          }}
         </div>
         <div
           class="originalText"

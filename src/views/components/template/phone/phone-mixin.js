@@ -23,6 +23,12 @@ export default {
     //从store中获取templatePannelData
     phoneData() {
       return this.$store.state.app.templatePannelData;
+    },
+    matchBrace() {
+      return txt => {
+        let newtxt = txt;
+        return newtxt.replace(/{|}/g, "");
+      };
     }
   },
 

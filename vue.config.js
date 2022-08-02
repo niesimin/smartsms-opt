@@ -26,9 +26,9 @@ module.exports = {
     //public: "192.168.201.80:8072",
     proxy: {
       "/": {
-        // target: "http://121.14.38.14:40001/", //对应请求到的接口"http://121.14.38.14:18501/mgp-opt/opt", //
+        target: "http://121.14.38.14:40001/", //对应请求到的接口"http://121.14.38.14:18501/mgp-opt/opt", //
         //target: "http://192.168.1.152:8480/", //勇叔
-        target: "http://192.168.201.205:8080/", //林青
+        // target: "http://192.168.201.205:8080/", //林青
         changeOrigin: process.env.NODE_ENV === "development" ? true : false,
         ws: true,
         pathRewrite: {

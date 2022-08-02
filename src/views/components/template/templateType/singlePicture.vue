@@ -19,23 +19,26 @@
               ></Input>
             </FormItem>
 
-            <!-- <FormItem label="短信原文" prop="templateText">
-              <Contentedit
-                placeholder="请输入短信原文"
-                maxlength="10"
-                show-word-limit
+            <FormItem label="短信原文" prop="templateTextHtml">
+              <ContentedInput
+                ref="templateTextHtml"
+                :maxlength="300"
+                v-model="formValidate.templateTextHtml"
+                placeholder="短信正文无需输入签名，如正文存在变量，请选中文本，点击设置变量"
+                @valueChange="contentedChange"
               >
-              </Contentedit>
-            </FormItem> -->
-            <FormItem label="短信原文" prop="templateText">
+              </ContentedInput>
+            </FormItem>
+
+            <!-- <FormItem label="短信原文" prop="templateTextStyle">
               <Input
                 type="textarea"
-                v-model="formValidate.templateText"
+                v-model="formValidate.templateTextStyle"
                 placeholder="请输入内容"
                 maxlength="300"
                 show-word-limit
               ></Input>
-            </FormItem>
+            </FormItem> -->
 
             <FormItem label="上传图片" prop="singlePicture.url">
               <UploadFile
@@ -83,6 +86,7 @@
               prop="singlePicture.clickAction.url"
             >
               <Input
+                style="display:none"
                 type="textarea"
                 v-model="formValidate.singlePicture.clickAction.url"
                 :placeholder="
@@ -93,6 +97,21 @@
                 maxlength="500"
                 show-word-limit
               ></Input>
+
+              <ContentedInput
+                ref="clickActionUrl"
+                :maxlength="500"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.singlePicture.clickAction.urlHtml"
+                :placeholder="
+                  formValidate.singlePicture.clickAction.type == 0
+                    ? '请输入链接,用户点击图片会跳转到该链接'
+                    : '请输入APP直达链接（Deeplink），用户点击后跳转到APP的指定页面'
+                "
+                @valueChange="getClickActionUrl"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem
@@ -101,12 +120,21 @@
               prop="singlePicture.clickAction.backupUrl"
             >
               <Input
+                style="display:none"
                 type="textarea"
                 v-model="formValidate.singlePicture.clickAction.backupUrl"
                 placeholder="请输入H5备用链接，用户未安装APP或直达链接无效时，跳转到备用的H5链接"
-                maxlength="500"
-                show-word-limit
               ></Input>
+              <ContentedInput
+                ref="backupUrlHtml"
+                :maxlength="500"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.singlePicture.clickAction.backupUrlHtml"
+                placeholder="请输入H5备用链接，用户未安装APP或直达链接无效时，跳转到备用的H5链接"
+                @valueChange="getBackupUrlHtml"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem
@@ -134,22 +162,46 @@
 
             <FormItem label="标题" prop="singlePicture.title">
               <Input
+                style="display:none"
                 type="textarea"
                 v-model="formValidate.singlePicture.title"
                 placeholder="请输入标题，超出文字客户端将省略...展示"
                 maxlength="17"
                 show-word-limit
               ></Input>
+
+              <ContentedInput
+                ref="singlePictureTitle"
+                :maxlength="17"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.singlePicture.titleHtml"
+                placeholder="请输入标题，超出文字客户端将省略...展示"
+                @valueChange="getTitleHtml"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem label="图片摘要" prop="singlePicture.introduction">
               <Input
+                style="display:none"
                 type="textarea"
                 v-model="formValidate.singlePicture.introduction"
                 placeholder="请输入图片摘要，超出文字客户端将省略...展示"
                 maxlength="38"
                 show-word-limit
               ></Input>
+
+              <ContentedInput
+                ref="singlePictureIntroduction"
+                :maxlength="38"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.singlePicture.introductionHtml"
+                placeholder="请输入图片摘要，超出文字客户端将省略...展示"
+                @valueChange="getIntroductionHtml"
+              >
+              </ContentedInput>
             </FormItem>
           </div>
         </Panel>
@@ -191,6 +243,7 @@
               prop="singlePicture.button.clickAction.url"
             >
               <Input
+                style="display:none"
                 type="textarea"
                 v-model="formValidate.singlePicture.button.clickAction.url"
                 :placeholder="
@@ -201,6 +254,20 @@
                 maxlength="500"
                 show-word-limit
               ></Input>
+              <ContentedInput
+                ref="btnClickActionUrl"
+                :maxlength="500"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.singlePicture.button.clickAction.urlHtml"
+                :placeholder="
+                  formValidate.singlePicture.button.clickAction.type == 0
+                    ? '请输入链接,用户点击图片会跳转到该链接'
+                    : '请输入APP直达链接（Deeplink），用户点击后跳转到APP的指定页面'
+                "
+                @valueChange="getBtnClickActionUrlHtml"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem
@@ -209,6 +276,7 @@
               prop="singlePicture.button.clickAction.backupUrl"
             >
               <Input
+                style="display:none"
                 type="textarea"
                 v-model="
                   formValidate.singlePicture.button.clickAction.backupUrl
@@ -217,6 +285,18 @@
                 maxlength="500"
                 show-word-limit
               ></Input>
+              <ContentedInput
+                ref="btnClickActionBackUrl"
+                :maxlength="500"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="
+                  formValidate.singlePicture.button.clickAction.backupUrlHtml
+                "
+                placeholder="请输入H5备用链接，用户未安装APP或直达链接无效时，跳转到备用的H5链接"
+                @valueChange="getBtnClickActionBackUrlHtml"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem
@@ -254,13 +334,13 @@
 <script>
 import { keyFactory } from "@/libs/tools.js";
 import UploadFile from "@/components/upload/upload.vue";
-//import Contentedit from "@/components/contenteditable/contenteditable.vue";
+import ContentedInput from "@/components/contenteditable/contentedInput.vue";
 import createTemplateMixin from "./createTemplate-mixin";
 export default {
   name: "SinglePicture",
   components: {
-    UploadFile
-    //  Contentedit
+    UploadFile,
+    ContentedInput
   },
   mixins: [createTemplateMixin],
   data() {
@@ -270,16 +350,22 @@ export default {
       formValidate: {
         templateName: "",
         templateText: "",
+        templateTextHtml: "",
+        params: [],
 
         singlePicture: {
           title: "",
+          titleHtml: "",
           introduction: "",
+          introductionHtml: "",
           url: "",
 
           clickAction: {
             type: "0",
             url: "",
+            urlHtml: "",
             backupUrl: "",
+            backupUrlHtml: "",
             pkgName: "",
             appName: ""
           },
@@ -335,7 +421,6 @@ export default {
         "singlePicture.clickAction.url": [
           {
             required: true,
-            type: "url",
             message: "请输入跳转链接"
           }
         ],
@@ -348,7 +433,6 @@ export default {
         "singlePicture.clickAction.backupUrl": [
           {
             required: true,
-            type: "url",
             message: "请输入备用链接"
           }
         ],
@@ -366,14 +450,12 @@ export default {
         "singlePicture.button.clickAction.url": [
           {
             required: true,
-            type: "url",
             message: "请输入跳转链接"
           }
         ],
         "singlePicture.button.clickAction.backupUrl": [
           {
             required: true,
-            type: "url",
             message: "请输入备用链接"
           }
         ],
@@ -407,14 +489,55 @@ export default {
     //获取表单数据
     validTemplateForm() {
       let parma = {};
+      console.log(this.formValidate.singlePicture);
       this.$refs.formValidate.validate(valid => {
         if (valid) {
           parma.templateName = this.formValidate.templateName;
           parma.templateText = this.formValidate.templateText;
-          parma.singlePicture = JSON.stringify(this.formValidate.singlePicture);
+          parma.params = this.formValidate.params;
+          //parma.singlePicture = JSON.stringify(this.formValidate.singlePicture);
+          parma.singlePicture = this.formValidate.singlePicture;
+          delete parma.singlePicture.clickAction.urlHtml;
+          delete parma.singlePicture.titleHtml;
+          delete parma.singlePicture.introductionHtml;
+          delete parma.singlePicture.clickAction.backupUrlHtml;
+
+          delete parma.singlePicture.button.clickAction.urlHtml;
+          delete parma.singlePicture.button.clickAction.backupUrlHtml;
+          parma.singlePicture = JSON.stringify(parma.singlePicture);
         }
       });
       return parma;
+    },
+
+    contentedChange({ variableGroup, variableParams, templateSubmitText }) {
+      this.formValidate.params = JSON.stringify(variableParams);
+      this.variableGroup = variableGroup;
+      this.formValidate.templateText = templateSubmitText;
+    },
+
+    getClickActionUrl({ templateSubmitText }) {
+      this.formValidate.singlePicture.clickAction.url = templateSubmitText;
+    },
+
+    getTitleHtml({ templateSubmitText }) {
+      this.formValidate.singlePicture.title = templateSubmitText;
+    },
+
+    getIntroductionHtml({ templateSubmitText }) {
+      this.formValidate.singlePicture.introduction = templateSubmitText;
+    },
+
+    getBackupUrlHtml({ templateSubmitText }) {
+      this.formValidate.singlePicture.clickAction.backupUrl = templateSubmitText;
+    },
+
+    getBtnClickActionUrlHtml({ templateSubmitText }) {
+      this.formValidate.singlePicture.button.clickAction.url = templateSubmitText;
+    },
+
+    getBtnClickActionBackUrlHtml({ templateSubmitText }) {
+      this.formValidate.singlePicture.button.clickAction.backupUrl = templateSubmitText;
     }
   }
 };

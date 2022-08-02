@@ -496,3 +496,27 @@ export const image2Base64 = img => {
   var dataURL = canvas.toDataURL("image/png");
   return dataURL;
 };
+
+export const setTemplateText = (txt, ary, allReplace = false) => {
+  let thml = txt;
+  if (ary && ary.length > 0 && ary instanceof Array) {
+    ary.filter((item, idx) => {
+      let num = idx + 1;
+      let itemName = "ted_group" + num;
+      let itemVal = item[itemName];
+      let regx = "{" + itemVal + "}";
+      let selectHtml = '<span contenteditable="false">&#xFEFF<span class="variable" contenteditable="false">'.concat(
+        item[itemName],
+        '<i class="ivu-icon ivu-icon-md-close"></i></span>&#xFEFF</span>'
+      );
+
+      if (thml.indexOf(regx) != -1) {
+        regx = !allReplace ? regx : new RegExp("\\" + regx, "g");
+        allReplace && console.log(regx);
+        thml = thml.replace(regx, selectHtml);
+      }
+    });
+  }
+
+  return thml;
+};

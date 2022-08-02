@@ -88,6 +88,7 @@
 
                 <FormItem label="短信正文" prop="smsText">
                   <Input
+                    style="display:none"
                     :disabled="action == 'add' ? false : true"
                     type="textarea"
                     v-model="formValidate.smsText"
@@ -96,6 +97,36 @@
                     show-word-limit
                     :rows="4"
                   ></Input>
+                  <ContentedInput
+                    v-if="action == 'add'"
+                    ref="templateTextStyle"
+                    :maxlength="300"
+                    v-model="formValidate.templateTextStyle"
+                    placeholder="短信正文无需输入签名，如正文存在变量，请选中文本，点击设置变量"
+                    @valueChange="contentedChange"
+                  >
+                  </ContentedInput>
+                  <div v-else v-html="formValidate.templateTextStyle"></div>
+                </FormItem>
+
+                <!-- <FormItem label="短信正文" prop="templateTextStyle">
+                  <ContentedInput
+                    :maxlength="300"
+                    v-model="formValidate.templateTextStyle"
+                    placeholder="短信正文无需输入签名，如正文存在变量，请选中文本，点击设置变量"
+                    @valueChange="contentedChange"
+                  ></ContentedInput>
+                </FormItem> -->
+
+                <FormItem
+                  label="关键字"
+                  prop="keyword"
+                  v-show="formValidate.putType == 1"
+                >
+                  <KeyWord
+                    v-model="formValidate.keyword"
+                    :disabled="action == 'add' ? false : true"
+                  ></KeyWord>
                 </FormItem>
 
                 <FormItem
@@ -382,6 +413,7 @@
 </template>
 
 <script>
+import KeyWord from "./keyWord.vue";
 import { mapMutations } from "vuex";
 import SinglePicturePhone from "@/views/components/template/phone/singlePicturePhone.vue";
 import MultiPicturePhone from "@/views/components/template/phone/multiPicturePhone.vue";
@@ -390,15 +422,17 @@ import VideoPhone from "@/views/components/template/phone/videoPhone.vue";
 import NotifyPhone from "@/views/components/template/phone/notifyPhone.vue";
 import ApplicationPhone from "@/views/components/template/phone/applicationsPhone.vue";
 import CouponPhone from "@/views/components/template/phone/couponPhone.vue";
+import ContentedInput from "@/components/contenteditable/contentedInput.vue";
 import { keyFactory } from "@/libs/tools.js";
 
 import FormModal from "@/components/modal/formModal.vue";
 import ReadOnlyTable from "@/components/tables/readOnlyTable.vue";
-import { getFormatTimesTamp } from "@/libs/tools";
+import { getFormatTimesTamp, setTemplateText } from "@/libs/tools";
 
 export default {
   name: "EditRule",
   components: {
+    KeyWord,
     SinglePicturePhone,
     MultiPicturePhone,
     VideoPhone,
@@ -407,7 +441,8 @@ export default {
     ApplicationPhone,
     CouponPhone,
     FormModal,
-    ReadOnlyTable
+    ReadOnlyTable,
+    ContentedInput
   },
   data() {
     return {
@@ -430,8 +465,10 @@ export default {
         templateId: null,
         templateName: "",
         templateType: null,
+        keyword: "",
         signature: "",
         smsText: "",
+        templateTextStyle: "",
         channelNum: "",
         matchType: 0,
         url: ""
@@ -664,11 +701,36 @@ export default {
       this.closeTag(this.$route);
     },
 
+    contentedChange({ templateSubmitText }) {
+      this.formValidate.smsText = templateSubmitText;
+      console.log(this.formValidate.smsText);
+    },
+
     //根据id获取投放内容
     getRule(id) {
       this.$post(this.$api.rule.getRule, { id: id }).then(res => {
         if (res.error == 0) {
           this.formValidate = res.data;
+          let smsText = res.data.smsText;
+          let matparam = smsText.match(/\{(.+?)\}/gi);
+          let param = [];
+          if (matparam && matparam.length > 0) {
+            matparam.filter((item, idx) => {
+              let num = ++idx;
+              let val = "ted_group" + num;
+              let stm = {};
+              stm[val] = item.replace(/{|}/g, "");
+              param.push(stm);
+            });
+            console.log(param);
+            this.formValidate.templateTextStyle = setTemplateText(
+              res.data.smsText,
+              param
+            );
+          } else {
+            this.formValidate.templateTextStyle = res.data.smsText;
+          }
+
           this.getCompanyAll();
         }
       });
@@ -732,6 +794,14 @@ export default {
           if (this.action == "add") {
             this.formValidate.signature = res.data.signature;
             this.formValidate.smsText = res.data.templateText;
+            // this.formValidate.templateTextStyle = res.data.templateTextStyle
+            //   ? res.data.templateTextStyle
+            //   : res.data.templateText;
+
+            this.formValidate.templateTextStyle = setTemplateText(
+              res.data.templateText,
+              res.data.params
+            );
           }
           this.formValidate.templateType = res.data.templateType;
           this.vendorBtnData = this.btnListData[
@@ -763,6 +833,14 @@ export default {
     },
 
     handleAddSubmit() {
+      console.log(this.formValidate);
+      if (
+        this.formValidate.keyword &&
+        this.formValidate.keyword.split(",").length < 3
+      ) {
+        this.$Message.error("关键词至少填写3个！");
+        return;
+      }
       this.$refs.formTemplate.validate(valid => {
         if (valid) {
           let url =
@@ -824,7 +902,6 @@ export default {
 
     //搜索短链
     searShortchUrl(e) {
-      console.log(e.target.value);
       let val = e.target.value;
       if (!val) {
         this.$Message.warning("请输入搜索内容!");

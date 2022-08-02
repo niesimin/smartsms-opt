@@ -96,52 +96,52 @@ export default {
         {
           title: "日期",
           key: "strDate",
-          minWidth: 120
+          minWidth: 100
         },
         {
           title: "厂商",
           key: "firmName",
-          minWidth: 120
+          minWidth: 100
         },
         {
           title: "公众号",
           key: "companyName",
-          minWidth: 120
+          minWidth: 100
         },
         {
           title: "投放名称",
           key: "putName",
-          minWidth: 120
+          minWidth: 200
         },
         {
           title: "模板名称",
           key: "templateName",
-          minWidth: 120
+          minWidth: 200
         },
         {
           title: "解析数",
           key: "analysisNumber",
-          minWidth: 120
+          minWidth: 100
         },
         {
           title: "曝光PV",
           key: "exposePv",
-          minWidth: 120
+          minWidth: 100
         },
         {
           title: "曝光UV",
           key: "exposeUv",
-          minWidth: 120
+          minWidth: 100
         },
         {
           title: "点击PV",
           key: "clickPv",
-          minWidth: 120
+          minWidth: 100
         },
         {
           title: "点击UV",
           key: "clickUv",
-          minWidth: 120
+          minWidth: 100
         }
       ],
       formValidate: {

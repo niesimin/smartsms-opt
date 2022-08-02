@@ -35,7 +35,10 @@ export const api = {
     updateRule: "rule/updateRule", //编辑规则
     deleteRule: "rule/deleteRule", //删除规则
     updateAuditStatusRule: "rule/updateAuditStatusRule", //上线/下线规则
-    getRule: "rule/getRule" //根据id查找规则
+    getRule: "rule/getRule", //根据id查找规则
+    uploadUrlFile: "rule/uploadUrlFile",
+    getAppendUrlList: "rule/getAppendUrlList", //获取动态参数url列表
+    downloadUrlTemplate: "rule/downloadUrlTemplate" //url模版下载
   },
   statistics: {
     getStatistics: "statistics/getStatistics" //获取规则列表

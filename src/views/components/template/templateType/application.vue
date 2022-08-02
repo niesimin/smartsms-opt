@@ -19,16 +19,23 @@
               ></Input>
             </FormItem>
 
-            <FormItem label="短信原文" prop="templateText">
-              <Input
+            <FormItem label="短信原文" prop="templateTextHtml">
+              <!-- <Input
                 type="textarea"
                 v-model="formValidate.templateText"
                 placeholder="请输入内容"
                 maxlength="300"
                 show-word-limit
               >
-                <span slot="append">.com</span></Input
+              </Input> -->
+              <ContentedInput
+                ref="templateTextHtml"
+                :maxlength="300"
+                v-model="formValidate.templateTextHtml"
+                placeholder="请输入内容"
+                @valueChange="contentedChange"
               >
+              </ContentedInput>
             </FormItem>
 
             <FormItem label="应用图标" prop="app.url">
@@ -149,11 +156,13 @@
 <script>
 import { keyFactory } from "@/libs/tools.js";
 import UploadFile from "@/components/upload/upload.vue";
+import ContentedInput from "@/components/contenteditable/contentedInput.vue";
 import createTemplateMixin from "./createTemplate-mixin";
 export default {
   name: "Application",
   components: {
-    UploadFile
+    UploadFile,
+    ContentedInput
   },
   mixins: [createTemplateMixin],
   data() {
@@ -163,7 +172,8 @@ export default {
       formValidate: {
         templateName: "",
         templateText: "",
-
+        templateTextHtml: "",
+        params: [],
         app: {
           introduction: "",
           url: "",
@@ -275,10 +285,17 @@ export default {
         if (valid) {
           parma.templateName = this.formValidate.templateName;
           parma.templateText = this.formValidate.templateText;
-          parma.app = JSON.stringify(this.formValidate.app);
+          parma.params = this.formValidate.params;
+          parma.app = this.formValidate.app;
+          parma.app = JSON.stringify(parma.app);
         }
       });
       return parma;
+    },
+    contentedChange({ variableGroup, variableParams, templateSubmitText }) {
+      this.formValidate.params = JSON.stringify(variableParams);
+      this.variableGroup = variableGroup;
+      this.formValidate.templateText = templateSubmitText;
     }
   }
 };

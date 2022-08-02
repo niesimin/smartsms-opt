@@ -43,9 +43,11 @@
         >
           <img :src="item.singlePicture.url" />
           <div class="vvu-card-body-text">
-            <div class="text-ellipsis">{{ item.singlePicture.title }}</div>
+            <div class="text-ellipsis">
+              {{ matchBrace(item.singlePicture.title) }}
+            </div>
             <div class="text-ellipsis-clamp">
-              {{ item.singlePicture.introduction }}
+              {{ matchBrace(item.singlePicture.introduction) }}
             </div>
           </div>
         </div>
@@ -260,7 +262,14 @@ export default {
       showVideo: null
     };
   },
-
+  computed: {
+    matchBrace() {
+      return txt => {
+        let newtxt = txt;
+        return newtxt.replace(/{|}/g, "");
+      };
+    }
+  },
   mounted() {
     this.cardData = this.panelData;
   },

@@ -162,7 +162,6 @@ export default {
   [contenteditable]:focus {
     outline: none;
     border: 1px solid #69b4f5;
-
     box-shadow: 0, 0, 0, 2px, rgba(68, 161, 242, 0.2);
   }
   .contentEdit:empty::before {

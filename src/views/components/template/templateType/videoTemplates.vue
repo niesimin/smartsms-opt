@@ -19,14 +19,22 @@
               ></Input>
             </FormItem>
 
-            <FormItem label="短信原文" prop="templateText">
-              <Input
+            <FormItem label="短信原文" prop="templateTextHtml">
+              <!-- <Input
                 type="textarea"
                 v-model="formValidate.templateText"
                 placeholder="请输入内容"
                 maxlength="300"
                 show-word-limit
-              ></Input>
+              ></Input> -->
+              <ContentedInput
+                ref="templateTextHtml"
+                :maxlength="300"
+                v-model="formValidate.templateTextHtml"
+                placeholder="短信正文无需输入签名，如正文存在变量，请选中文本，点击设置变量"
+                @valueChange="contentedChange"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem label="上传视频" prop="video.url">
@@ -86,11 +94,22 @@
             <FormItem label="标题" prop="video.title">
               <Input
                 type="textarea"
+                style="display:none"
                 v-model="formValidate.video.title"
                 placeholder="请输入标题，超出文字客户端将省略...展示"
                 maxlength="17"
                 show-word-limit
               ></Input>
+              <ContentedInput
+                ref="videoTitle"
+                :maxlength="17"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.video.titleHtml"
+                placeholder="请输入标题，超出文字客户端将省略...展示"
+                @valueChange="getTitleHtml"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem label="图片跳转类型" prop="video.clickAction.type">
@@ -111,6 +130,7 @@
               prop="video.clickAction.url"
             >
               <Input
+                style="display:none"
                 type="textarea"
                 v-model="formValidate.video.clickAction.url"
                 :placeholder="
@@ -121,6 +141,20 @@
                 maxlength="500"
                 show-word-limit
               ></Input>
+              <ContentedInput
+                ref="videoClickActionUrl"
+                :maxlength="500"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.video.clickAction.urlHtml"
+                :placeholder="
+                  formValidate.video.clickAction.type == 0
+                    ? '请输入链接,用户点击图片会跳转到该链接'
+                    : '请输入APP直达链接（Deeplink），用户点击后跳转到APP的指定页面'
+                "
+                @valueChange="getClickActionUrl"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem
@@ -130,11 +164,22 @@
             >
               <Input
                 type="textarea"
+                style="display:none"
                 v-model="formValidate.video.clickAction.backupUrl"
                 placeholder="请输入H5备用链接，用户未安装APP或直达链接无效时，跳转到备用的H5链接"
                 maxlength="500"
                 show-word-limit
               ></Input>
+              <ContentedInput
+                ref="videoBackupUrlHtml"
+                :maxlength="500"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.video.clickAction.backupUrlHtml"
+                placeholder="请输入H5备用链接，用户未安装APP或直达链接无效时，跳转到备用的H5链接"
+                @valueChange="getBackupUrlHtml"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem
@@ -163,11 +208,22 @@
             <FormItem label="视频摘要" prop="video.introduction">
               <Input
                 type="textarea"
+                style="display:none"
                 v-model="formValidate.video.introduction"
                 placeholder="请输入图片摘要，超出文字客户端将省略...展示"
                 maxlength="38"
                 show-word-limit
               ></Input>
+              <ContentedInput
+                ref="videoIntroduction"
+                :maxlength="38"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.video.introductionHtml"
+                placeholder="请输入图片摘要，超出文字客户端将省略...展示"
+                @valueChange="getIntroductionHtml"
+              >
+              </ContentedInput>
             </FormItem>
           </div>
         </Panel>
@@ -204,6 +260,7 @@
               prop="video.button.clickAction.url"
             >
               <Input
+                style="display:none"
                 type="textarea"
                 v-model="formValidate.video.button.clickAction.url"
                 :placeholder="
@@ -214,6 +271,20 @@
                 maxlength="500"
                 show-word-limit
               ></Input>
+              <ContentedInput
+                ref="videoBtnClickActionUrl"
+                :maxlength="500"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.video.button.clickAction.urlHtml"
+                :placeholder="
+                  formValidate.video.button.clickAction.type == 0
+                    ? '请输入链接,用户点击图片会跳转到该链接'
+                    : '请输入APP直达链接（Deeplink），用户点击后跳转到APP的指定页面'
+                "
+                @valueChange="getBtnClickActionUrlHtml"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem
@@ -222,12 +293,23 @@
               prop="video.button.clickAction.backupUrl"
             >
               <Input
+                style="display:none"
                 type="textarea"
                 v-model="formValidate.video.button.clickAction.backupUrl"
                 placeholder="请输入H5备用链接，用户未安装APP或直达链接无效时，跳转到备用的H5链接"
                 maxlength="500"
                 show-word-limit
               ></Input>
+              <ContentedInput
+                ref="videoBtnClickActionBackUrl"
+                :maxlength="500"
+                :choice="true"
+                :variableGroupChose="variableGroup"
+                v-model="formValidate.video.button.clickAction.backupUrlHtml"
+                placeholder="请输入H5备用链接，用户未安装APP或直达链接无效时，跳转到备用的H5链接"
+                @valueChange="getBtnClickActionBackUrlHtml"
+              >
+              </ContentedInput>
             </FormItem>
 
             <FormItem
@@ -262,11 +344,13 @@
 <script>
 import { keyFactory } from "@/libs/tools.js";
 import UploadFile from "@/components/upload/upload.vue";
+import ContentedInput from "@/components/contenteditable/contentedInput.vue";
 import createTemplateMixin from "./createTemplate-mixin";
 export default {
   name: "VideoTemplate",
   components: {
-    UploadFile
+    UploadFile,
+    ContentedInput
   },
   mixins: [createTemplateMixin],
   data() {
@@ -278,17 +362,23 @@ export default {
       formValidate: {
         templateName: "",
         templateText: "",
+        templateTextHtml: "",
+        params: [],
 
         video: {
           title: "",
+          titleHtml: "",
           introduction: "",
+          introductionHtml: "",
           coverUrl: "",
           url: "",
 
           clickAction: {
             type: "0",
             url: "",
+            urlHtml: "",
             backupUrl: "",
+            backupUrlHtml: "",
             pkgName: "",
             appName: ""
           },
@@ -298,7 +388,9 @@ export default {
             clickAction: {
               type: "0",
               url: "",
+              urlHtml: "",
               backupUrl: "",
+              backupUrlHtml: "",
               pkgName: "",
               appName: ""
             }
@@ -349,7 +441,6 @@ export default {
         "video.clickAction.url": [
           {
             required: true,
-            type: "url",
             message: "请输入跳转链接"
           }
         ],
@@ -362,7 +453,6 @@ export default {
         "video.clickAction.backupUrl": [
           {
             required: true,
-            type: "url",
             message: "请输入备用链接"
           }
         ],
@@ -380,14 +470,12 @@ export default {
         "video.button.clickAction.url": [
           {
             required: true,
-            type: "url",
             message: "请输入跳转链接"
           }
         ],
         "video.button.clickAction.backupUrl": [
           {
             required: true,
-            type: "url",
             message: "请输入备用链接"
           }
         ],
@@ -439,10 +527,43 @@ export default {
         if (valid) {
           parma.templateName = this.formValidate.templateName;
           parma.templateText = this.formValidate.templateText;
-          parma.video = JSON.stringify(this.formValidate.video);
+          parma.params = this.formValidate.params;
+          parma.video = this.formValidate.video;
+          delete parma.video.titleHtml;
+          delete parma.video.clickAction.urlHtml;
+          delete parma.video.introductionHtml;
+
+          delete parma.video.clickAction.backupUrlHtml;
+
+          delete parma.video.button.clickAction.urlHtml;
+          delete parma.video.button.clickAction.backupUrlHtml;
+          parma.video = JSON.stringify(parma.video);
         }
       });
       return parma;
+    },
+    contentedChange({ variableGroup, variableParams, templateSubmitText }) {
+      this.formValidate.params = JSON.stringify(variableParams);
+      this.variableGroup = variableGroup;
+      this.formValidate.templateText = templateSubmitText;
+    },
+    getTitleHtml({ templateSubmitText }) {
+      this.formValidate.video.title = templateSubmitText;
+    },
+    getClickActionUrl({ templateSubmitText }) {
+      this.formValidate.video.clickAction.url = templateSubmitText;
+    },
+    getIntroductionHtml({ templateSubmitText }) {
+      this.formValidate.video.introduction = templateSubmitText;
+    },
+    getBackupUrlHtml({ templateSubmitText }) {
+      this.formValidate.video.clickAction.backupUrl = templateSubmitText;
+    },
+    getBtnClickActionUrlHtml({ templateSubmitText }) {
+      this.formValidate.video.button.clickAction.url = templateSubmitText;
+    },
+    getBtnClickActionBackUrlHtml({ templateSubmitText }) {
+      this.formValidate.video.button.clickAction.backupUrl = templateSubmitText;
     }
   }
 };

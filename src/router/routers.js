@@ -117,8 +117,7 @@ export default [
     name: "rule",
     meta: {
       icon: "md-jet",
-      title: "投放管理",
-      notCache: true
+      title: "投放管理"
     },
     component: Main,
     children: [
@@ -127,7 +126,8 @@ export default [
         name: "getRuleList",
         meta: {
           icon: "md-jet",
-          title: "投放管理" //
+          title: "投放管理", //
+          notCache: true
         },
         component: () => import("../views/components/rule/getRuleList.vue")
       },

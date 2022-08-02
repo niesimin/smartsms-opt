@@ -127,7 +127,10 @@ export default {
   methods: {
     //上传文件之前的钩子，参数为上传的文件，若返回 false 或者 Promise 则停止上传
     handelBeforeUpload(file) {
-      if (file.size / 1024 <= this.maxSize && this.handleFormat(file.type)) {
+      if (
+        file.size / 1024 <= this.maxSize &&
+        this.handleFormat(file.type, file.name)
+      ) {
         this.resetProgress();
         //使用FileReader对象（和他的方法）来操作目标文件/图片
         const reader = new FileReader();
@@ -200,7 +203,10 @@ export default {
 
     onUploadError(err) {
       console.log(err);
-      this.addProgress(100, "wrong");
+      this.addProgress(60);
+      this.$nextTick(() => {
+        this.addProgress(100, "wrong");
+      });
       // this.percent = 100;
       // this.uploadStatus = "wrong";
       if (!err.errorMsg) {
@@ -215,9 +221,12 @@ export default {
       console.log(file);
     },
 
-    handleFormat(fm) {
+    handleFormat(fm, name) {
       return this.format.some(item => {
-        return fm.indexOf(item.toLowerCase()) > -1;
+        return (
+          fm.indexOf(item.toLowerCase()) > -1 ||
+          name.indexOf(item.toLowerCase()) > -1
+        );
       });
     },
 

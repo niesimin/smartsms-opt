@@ -30,6 +30,9 @@ li {
 .bg-white {
   background: #ffffff !important;
 }
+.text-cursor {
+  cursor: pointer;
+}
 .pull-right {
   float: right;
 }
