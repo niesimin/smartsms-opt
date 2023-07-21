@@ -1,90 +1,88 @@
-.main{
-    height: 100%;
-    // slider
-		.userAvatar  .ivu-avatar-image{
-			background: #ffffff;
+.main {
+  height: 100%;
+  // slider
+  .userAvatar .ivu-avatar-image {
+    background: #ffffff;
     padding: 6px;
-		}
-    .logo-on {
-        height: 64px;
-        padding: 10px;
-        div{
-          color: #ffffff;
-          text-align: center;
-          line-height: 44px;
-          font-size: 20px;
-          letter-spacing: 0.2em;
-        }
+  }
+  .logo-on {
+    height: 64px;
+    padding: 10px;
+    div {
+      color: #ffffff;
+      text-align: center;
+      line-height: 44px;
+      font-size: 20px;
+      letter-spacing: 0.2em;
     }
-    .left-sider {
-        box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
-        .ivu-layout-sider-children {
-          overflow-y: scroll;
-          margin-right: -18px;
-        }
+  }
+  .left-sider {
+    box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+    .ivu-layout-sider-children {
+      overflow-y: scroll;
+      margin-right: -18px;
     }
-    // right header
-    .ivu-layout-header{
+  }
+  // right header
+  .ivu-layout-header {
+    color: #ffffff;
+    padding-left: 0px;
+    padding-right: 10px;
+    .ivu-icon {
+      cursor: pointer;
+      vertical-align: middle;
+    }
+    // 面包屑
+    .custom-bread-crumb {
+      display: inline-block;
+      margin-left: 30px;
+      vertical-align: middle;
+      color: #ffffff;
+      > span:last-child {
         color: #ffffff;
-        padding-left: 0px;
-        padding-right: 10px;
-        .ivu-icon{
-          cursor: pointer;
-          vertical-align: middle;
-        }
-        // 面包屑
-        .custom-bread-crumb{
-          display: inline-block;
-          margin-left: 30px;
-          vertical-align: middle;
+      }
+      .ivu-breadcrumb-item-link {
+        vertical-align: middle;
+        color: #ffffff;
+        :hover {
           color: #ffffff;
-          >span:last-child{
-            color: #ffffff;
-          }
-          .ivu-breadcrumb-item-link{
-            vertical-align: middle;
-            color: #ffffff;
-            :hover{ color: #ffffff;}
-          }
         }
-       
-        
+      }
     }
+  }
 
-    //right content
-    .main-content-con {
-      height: calc(100% - 64px);
+  //right content
+  .main-content-con {
+    height: calc(100% - 64px);
+    overflow: hidden;
+    .main-layout-con {
+      height: 100%;
       overflow: hidden;
-      .main-layout-con{
-        height: 100%;
-        overflow: hidden;
-        .tag-nav-wrapper{
-          padding: 6px 0;
-          margin: 0 12px 0 12px;
-          height:52px;
-          background:#f5f7f9;
-          
-        }
+      .tag-nav-wrapper {
+        padding: 6px 0;
+        margin: 0 12px 0 12px;
+        height: 52px;
+        background: #f5f7f9;
       }
-      .content-wrapper{
-        padding: 0 18px 18px 18px;
-        height: ~"calc(100% - 80px)";
-        padding-bottom: 10px;
-        overflow: auto;
+    }
+    .content-wrapper {
+      padding: 0 18px 18px 18px;
+      height: ~"calc(100% - 80px)";
+      padding-bottom: 10px;
+      overflow: auto;
       //  不需要时注释
-        // >div{
-        //   height: 100%;
-        //   >.ivu-card{
-        //     height: 100%;
-        //     >.ivu-card-body{
-        //       height:88%;
-        //       .mainPageTable{
-        //         height: 100%;
-        //       }
-        //     }
-        //   }
-        // }
-
-      }
+      // >div{
+      //   height: 100%;
+      //   >.ivu-card{
+      //     height: 100%;
+      //     >.ivu-card-body{
+      //       height:88%;
+      //       .mainPageTable{
+      //         height: 100%;
+      //       }
+      //     }
+      //   }
+      // }
+    }
   }
 }

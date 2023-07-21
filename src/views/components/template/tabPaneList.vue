@@ -41,7 +41,7 @@
           v-if="item.templateType == 1"
           @click="editTemplate(item.id, 3)"
         >
-          <img :src="item.singlePicture.url" />
+          <img :src="showCardImg(item.singlePicture.url)" />
           <div class="vvu-card-body-text">
             <div class="text-ellipsis">
               {{ matchBrace(item.singlePicture.title) }}
@@ -263,6 +263,15 @@ export default {
     };
   },
   computed: {
+    showCardImg() {
+      return function(url) {
+        let picurl = url;
+        if (url.indexOf("&") != -1) {
+          picurl = url.split("&")[0];
+        }
+        return picurl;
+      };
+    },
     matchBrace() {
       return txt => {
         let newtxt = txt;

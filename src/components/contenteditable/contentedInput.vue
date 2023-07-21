@@ -243,7 +243,7 @@ export default {
         templateText: this.templateText.trim(),
         variableGroup: this.variableGroup,
         variableParams: this.variableParams,
-        templateSubmitText: this.templateSubmitText,
+        templateSubmitText: this.templateSubmitText.replace(/&amp;/g, "&"),
         templateHtml: this.$refs.editable.innerHTML
       });
       // console.log(

@@ -35,7 +35,7 @@
             >
               <img
                 v-if="phoneData.singlePicture.url"
-                :src="phoneData.singlePicture.url"
+                :src="showCardImg(phoneData.singlePicture.url)"
               />
               <img v-else :src="banner" style="width:100px" />
             </div>

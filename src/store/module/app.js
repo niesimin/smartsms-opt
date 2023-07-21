@@ -21,6 +21,7 @@ const closePage = (state, route) => {
   state.tagNavList = state.tagNavList.filter(item => {
     return !routeEqual(item, route);
   });
+
   router.push(nextRoute);
 };
 

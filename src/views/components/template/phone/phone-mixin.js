@@ -29,6 +29,15 @@ export default {
         let newtxt = txt;
         return newtxt.replace(/{|}/g, "");
       };
+    },
+    showCardImg() {
+      return function(url) {
+        let picurl = url;
+        if (url.indexOf("&") != -1) {
+          picurl = url.split("&")[0];
+        }
+        return picurl;
+      };
     }
   },
 

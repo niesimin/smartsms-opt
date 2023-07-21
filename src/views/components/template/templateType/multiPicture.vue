@@ -169,7 +169,10 @@
             <FormItem
               :label="'副图' + (idx + 1) + '标题'"
               :prop="'multiPicture.smallPictures.' + idx + '.title'"
-              :rules="{ required: true, message: '请输入副图文标题' }"
+              :rules="{
+                required: true,
+                message: '请输入副图文标题'
+              }"
             >
               <Input
                 type="textarea"
@@ -208,7 +211,10 @@
             <FormItem
               :label="'副图' + (idx + 1) + '跳转类型'"
               :prop="'multiPicture.smallPictures.' + idx + '.clickAction.type'"
-              :rules="{ required: true, message: '请选择跳转类型' }"
+              :rules="{
+                required: true,
+                message: '请选择跳转类型'
+              }"
             >
               <Select v-model="item.clickAction.type">
                 <Option
@@ -223,7 +229,10 @@
             <FormItem
               label="直达链接"
               :prop="'multiPicture.smallPictures.' + idx + '.clickAction.url'"
-              :rules="{ required: true, message: '请输入跳转链接' }"
+              :rules="{
+                required: true,
+                message: '请输入跳转链接'
+              }"
             >
               <Input
                 type="textarea"
@@ -240,7 +249,10 @@
               :prop="
                 'multiPicture.smallPictures.' + idx + '.clickAction.backupUrl'
               "
-              :rules="{ required: true, message: '请输入备用链接' }"
+              :rules="{
+                required: true,
+                message: '请输入备用链接'
+              }"
             >
               <Input
                 type="textarea"
@@ -256,7 +268,10 @@
               :prop="
                 'multiPicture.smallPictures.' + idx + '.clickAction.pkgName'
               "
-              :rules="{ required: true, message: '请输入安装包名' }"
+              :rules="{
+                required: true,
+                message: '请输入安装包名'
+              }"
               v-if="item.clickAction.type == 1"
             >
               <Input

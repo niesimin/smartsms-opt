@@ -49,7 +49,7 @@
                 @cropSuccess="getUploadUrl"
               >
                 <img
-                  :src="formValidate.singlePicture.url"
+                  :src="showCardImg(formValidate.singlePicture.url)"
                   v-if="formValidate.singlePicture.url"
                 />
 

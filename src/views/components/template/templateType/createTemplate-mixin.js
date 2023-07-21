@@ -32,7 +32,17 @@ export default {
     //加载时提交一次formValidate，父组件mouted时获取并写进store
     this.$emit("getFormValidate", this.formValidate);
   },
-
+  computed: {
+    showCardImg() {
+      return function(url) {
+        let picurl = url;
+        if (url.indexOf("&") != -1) {
+          picurl = url.split("&")[0];
+        }
+        return picurl;
+      };
+    }
+  },
   methods: {
     setTemplate(data) {
       this.formValidate.templateName = data.templateName; //模板名称
