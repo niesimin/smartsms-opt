@@ -139,7 +139,7 @@ export default {
 
         if (this.action) {
           this.uploadData.fileName = file.name;
-
+          console.log(this.uploadData);
           this.addProgress(Math.floor(Math.random() * 90));
         } else {
           //当文件成功读取时，执行load 事件
